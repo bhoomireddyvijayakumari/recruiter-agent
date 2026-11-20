@@ -13,20 +13,20 @@ Built as a low-cost practice project: FastAPI, in-process embeddings, in-memory 
 
 | | |
 |---|---|
-| **JD input** <br> ![JD input](docs/screenshots/01-ui-job-description.png) | **Shortlist and single-resume inputs** <br> ![Inputs](docs/screenshots/02-ui-shortlist-and-single-inputs.png) |
-| **Local shortlist setup** <br> ![Local setup](docs/screenshots/03-local-shortlist-setup.png) | **Local shortlist results** <br> ![Local results](docs/screenshots/04-local-shortlist-results.png) |
+| **JD input** <br> ![JD input](screenshots/01-ui-job-description.png) | **Shortlist and single-resume inputs** <br> ![Inputs](screenshots/02-ui-shortlist-and-single-inputs.png) |
+| **Local shortlist setup** <br> ![Local setup](screenshots/03-local-shortlist-setup.png) | **Local shortlist results** <br> ![Local results](screenshots/04-local-shortlist-results.png) |
 
 **Google Drive folder shared with the service account**
 
-![Drive folder](docs/screenshots/05-drive-folder-shared.png)
+![Drive folder](screenshots/05-drive-folder-shared.png)
 
 **Shortlist from the Drive folder**
 
-![Drive results](docs/screenshots/06-drive-shortlist-results.png)
+![Drive results](screenshots/06-drive-shortlist-results.png)
 
 **Single resume match**
 
-![Single match pdf](docs/screenshots/07-single-resume-match-pdf.png)
+![Single match pdf](screenshots/07-single-resume-match-pdf.png)
 
 ## How it works
 
@@ -104,8 +104,6 @@ resumes/        sample resumes (fake data only)
 sample_data/    sample JD
 infra/          AWS setup scripts and ECS task definition
 .github/        CI/CD workflow (GitHub Actions to ECS)
-docs/           screenshots and guide template
-guide.html      full step-by-step build and deployment guide
 ```
 
 
