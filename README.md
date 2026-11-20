@@ -7,8 +7,7 @@ A small agent that helps recruiters screen resumes against a job description (JD
 
 Every score comes with matched and missing skills and the resume excerpts behind it. Resumes are anonymized before scoring (name, contact details, age, gender, nationality, years), and results are decision support only: a human makes the hiring decision.
 
-Built as a low-cost practice project: FastAPI, in-process embeddings, in-memory ChromaDB, and a deployment path to AWS ECS Fargate.
-
+Built as a low-cost practice project: FastAPI, in-process embeddings, in-memory ChromaDB.
 ## Screenshots
 
 | | |
