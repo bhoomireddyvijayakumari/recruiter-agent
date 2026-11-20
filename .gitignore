@@ -1,0 +1,27 @@
+cat > .gitignore <<'EOF'
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# Secrets - never commit
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/.gitkeep
+sa.json
+*service-account*.json
+recruiter-*.json
+*.pem
+*.key
+
+# Real candidate data - never commit (only the fake sample folder is tracked)
+resumes/*
+!resumes/jd_python_backend/
+
+# Build output
+*.zip
+EOF

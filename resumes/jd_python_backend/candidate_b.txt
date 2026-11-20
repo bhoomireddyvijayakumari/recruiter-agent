@@ -1,0 +1,3 @@
+Ravi Kumar
+Email: ravi@example.com | Age: 41
+Frontend developer focused on React and JavaScript single page apps. Some Node.js services, MySQL queries, Git workflows, and agile teamwork. Basic Docker usage.

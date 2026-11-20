@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recruiter Assistant</title>
+<style>
+:root{--bg:#fff;--fg:#1c1c1e;--mut:#6b7280;--card:#f5f6f8;--acc:#2563eb;--bd:#d9dce1;--err:#b91c1c}
+@media(prefers-color-scheme:dark){:root{--bg:#16181c;--fg:#e8e9eb;--mut:#9aa0a6;--card:#21242a;--acc:#6ea2ff;--bd:#343841;--err:#f87171}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:940px;margin:0 auto;padding:24px 16px}
+h1{font-size:22px;margin:0 0 4px}.mut{color:var(--mut)}
+section{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:16px 0}
+label{display:block;font-weight:600;margin:10px 0 4px}
+textarea,input[type=text],input[type=number]{width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
+textarea{min-height:130px}button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;cursor:pointer;margin-top:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:140px}
+.box{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--bd);vertical-align:top}
+.err{color:var(--err)}.warn{border-left:3px solid #d97706;padding-left:10px}.tag{font-size:12px;color:var(--mut)}
+</style></head><body><main>
+<h1>Recruiter Assistant</h1>
+<p class="mut">Blind, explainable resume screening. Scores are decision support only.</p>
+<section><h3>1. Job description</h3>
+<label for="jd_text">Paste JD text</label><textarea id="jd_text"></textarea>
+<label for="jd_file">...or upload JD (PDF / DOCX / TXT)</label><input type="file" id="jd_file" accept=".pdf,.docx,.txt,.md"></section>
+<section><h3>2a. Shortlist from a folder</h3>
+<label for="source">Google Drive folder link (or <code>local:FOLDER</code> for local testing)</label>
+<input type="text" id="source" placeholder="https://drive.google.com/drive/folders/...">
+<div class="row"><div><label for="top_n">Top N</label><input type="number" id="top_n" value="10" min="1"></div>
+<div><label for="min_score">Minimum score</label><input type="number" id="min_score" value="0" min="0" max="100"></div></div>
+<button onclick="shortlist()">Shortlist</button><div id="out1" class="box"></div></section>
+<section><h3>2b. Match a single resume</h3>
+<input type="file" id="resume" accept=".pdf,.docx,.txt,.md"><br><button onclick="matchOne()">Score match</button><div id="out2" class="box"></div></section>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function jdForm(){const fd=new FormData();fd.append('jd_text',$('jd_text').value);const f=$('jd_file').files[0];if(f)fd.append('jd_file',f);return fd}
+async function call(url,fd,out){out.innerHTML='<p>Working... (first run downloads/loads the model)</p>';
+ try{const r=await fetch(url,{method:'POST',body:fd});const j=await r.json();if(!r.ok)throw new Error(j.detail||r.statusText);return j}
+ catch(e){out.innerHTML='<p class="err">'+esc(e.message)+'</p>'}}
+function extras(j){let h='';if(j.jd_warnings&&j.jd_warnings.length)h+='<p class="warn">JD wording to review for fairness: '+j.jd_warnings.map(esc).join(', ')+'</p>';
+ if(j.skipped&&j.skipped.length)h+='<p class="tag">Skipped: '+j.skipped.map(esc).join('; ')+'</p>';return h+'<p class="tag">'+esc(j.note)+'</p>'}
+function table(rows){return '<table><tr><th>#</th><th>File</th><th>Score</th><th>Matched skills</th><th>Missing skills</th><th>Why / evidence</th></tr>'+
+ rows.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(r.file)+'</td><td><b>'+r.score+'</b></td><td>'+r.matched_skills.map(esc).join(', ')+'</td><td>'+r.missing_skills.map(esc).join(', ')+
+ '</td><td>'+esc(r.why)+'<details><summary>evidence</summary>'+r.evidence.map(e=>'<p><b>'+esc(e.requirement)+'</b><br>'+esc(e.resume_excerpt)+' <span class="tag">('+e.similarity+')</span></p>').join('')+'</details></td></tr>').join('')+'</table>'}
+async function shortlist(){const fd=jdForm();fd.append('source',$('source').value);fd.append('top_n',$('top_n').value);fd.append('min_score',$('min_score').value);
+ const j=await call('/api/shortlist',fd,$('out1'));if(j)$('out1').innerHTML='<p>Reviewed '+j.total+' files.</p>'+(j.shortlist.length?table(j.shortlist):'<p>No resumes above the threshold.</p>')+extras(j)}
+async function matchOne(){const f=$('resume').files[0];if(!f){$('out2').innerHTML='<p class="err">Choose a resume file.</p>';return}
+ const fd=jdForm();fd.append('resume',f);const j=await call('/api/match',fd,$('out2'));if(j)$('out2').innerHTML=(j.result?table([j.result]):'<p>No readable text.</p>')+extras(j)}
+</script></main></body></html>

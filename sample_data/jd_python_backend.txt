@@ -1,0 +1,6 @@
+Backend Engineer (Python)
+- Build and maintain REST API services using Python and FastAPI
+- Containerize and deploy services with Docker on AWS
+- Design PostgreSQL schemas, write efficient SQL queries
+- Write automated tests and work in an agile team with CI/CD pipelines
+- Communicate clearly with product and data teams

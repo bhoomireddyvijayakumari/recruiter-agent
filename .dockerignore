@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.env
+secrets/
+*.zip
+.git
+tests
+docs
+infra
+guide.html

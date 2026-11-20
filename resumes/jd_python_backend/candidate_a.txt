@@ -1,0 +1,4 @@
+Asha Verma
+Email: asha@example.com | Phone: +91 98765 43210
+Gender: Female | DOB: 12/03/1996
+Backend developer. Built REST API services in Python with FastAPI and Flask, deployed with Docker on AWS ECS, CI/CD in GitHub Actions. Designed PostgreSQL schemas and optimized SQL queries. Wrote pytest suites and worked in agile sprints with product and data teams.

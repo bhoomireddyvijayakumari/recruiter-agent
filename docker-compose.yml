@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/sa.json
+    volumes:
+      - ./resumes:/data/resumes:ro
+      - ./secrets:/secrets:ro
